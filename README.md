@@ -7,7 +7,7 @@ Página web interactiva y responsiva (laptop, iPad y teléfono) basada en la **G
 ## ¿Qué incluye?
 
 - **Portada y datos personales:** Nombre, grupo, fecha e instrucciones de "Cómo jugar".
-- **Etapa 1 · Calificación de sueño:** Las 10 preguntas con puntaje automático (`+10`, `+5`, `⚠️ +0`), suma instantánea sobre 100 y cálculo visual de tu nivel de luna (*Luna llena*, *Luna creciente*, *Media luna* y *Luna menguante*).
+- **Etapa 1 · Calificación de sueño:** Las 10 preguntas con respuestas neutras (sin mostrar los puntos por opción para evitar sesgos) y cálculo automático sobre 100 al completarlas, resaltando tu nivel de luna (*Luna llena*, *Luna creciente*, *Media luna* y *Luna menguante*).
 - **Etapa 2 · Tu Radar de riesgos:** Los 10 factores de riesgo sincronizados automáticamente con tus respuestas de la Etapa 1 (con opción de ajuste manual y filtro), preguntas guía para mejorar cada hábito y la sección interactiva **Mi reto de la semana**.
 - **Etapa 3 · Encuentra tu herramienta:** Mapa de decisión interactivo que te recomienda tu punto de partida (*Respiración 4-7-8*, *Journaling* o *Meditación para dormir*), registro de 3 noches, calificación con 5 estrellas y guías prácticas integradas:
   - Temporizador visual guiado para **Respiración 4-7-8**.

@@ -261,6 +261,8 @@
 
   function getRadarMark(qId) {
     if (state.radarOverrides[qId]) return state.radarOverrides[qId];
+    // Only auto-reveal risk/watch marks once all 10 questions are answered so options don't give away scores mid-quiz
+    if (Object.keys(state.answers).length < QUESTIONS.length) return "none";
     const pts = state.answers[qId];
     if (pts === 0) return "risk";
     if (pts === 5) return "watch";
@@ -301,11 +303,10 @@
 
       const optionsHTML = q.options
         .map((opt) => {
-          const warnHTML = opt.risk ? `<span class="inline-warn" aria-label="Factor de riesgo">⚠️</span>` : "";
           return `
             <button
               type="button"
-              class="option-btn pts-${opt.pts}"
+              class="option-btn"
               data-qid="${q.id}"
               data-pts="${opt.pts}"
               role="radio"
@@ -314,10 +315,6 @@
               <span class="option-left">
                 <span class="radio-dot" aria-hidden="true"></span>
                 <span>${opt.label}</span>
-              </span>
-              <span class="option-right">
-                ${warnHTML}
-                <span class="pts-pill">+${opt.pts}</span>
               </span>
             </button>
           `;
@@ -331,10 +328,6 @@
           <div class="q-options" role="radiogroup" aria-label="Pregunta ${q.id}: ${q.text}">
             ${optionsHTML}
           </div>
-        </div>
-        <div class="q-score-box" id="score-box-${q.id}" aria-label="Puntos de la pregunta ${q.id}">
-          <span class="q-score-value" id="score-val-${q.id}">—</span>
-          <span class="q-score-unit">pts</span>
         </div>
       `;
 
@@ -371,19 +364,9 @@
     QUESTIONS.forEach((q) => {
       const selectedPts = state.answers[q.id];
       const card = document.getElementById(`question-${q.id}`);
-      const scoreBox = document.getElementById(`score-box-${q.id}`);
-      const scoreVal = document.getElementById(`score-val-${q.id}`);
       const hasAnswer = selectedPts !== undefined;
 
       card.classList.toggle("answered", hasAnswer);
-      scoreBox.classList.remove("is-0", "is-5", "is-10");
-
-      if (hasAnswer) {
-        scoreVal.textContent = `+${selectedPts}`;
-        scoreBox.classList.add(`is-${selectedPts}`);
-      } else {
-        scoreVal.textContent = "—";
-      }
 
       card.querySelectorAll(".option-btn").forEach((btn) => {
         const isSelected = hasAnswer && Number(btn.dataset.pts) === selectedPts;
@@ -398,19 +381,27 @@
 
     const totalEl = document.getElementById("total-score");
     const topScoreEl = document.getElementById("topbar-score");
+    const topUnitEl = document.getElementById("topbar-score-unit");
+    const topPill = document.getElementById("topbar-score-pill");
     const statusText = document.getElementById("score-status-text");
 
     if (count === 0) {
       totalEl.textContent = "--";
-      topScoreEl.textContent = "--";
-      statusText.textContent = "Suma los puntos de tus 10 cuadros y busca tu nivel de luna.";
+      topScoreEl.textContent = "0";
+      topUnitEl.textContent = "/10";
+      topPill.title = "Preguntas respondidas en la Etapa 1";
+      statusText.textContent = "Responde las 10 preguntas para descubrir tu calificación y tu nivel de luna.";
     } else if (count < 10) {
-      totalEl.textContent = String(total);
-      topScoreEl.textContent = String(total);
-      statusText.textContent = `Llevas ${count} de 10 preguntas respondidas (parcial: ${total} pts). Responde las ${10 - count} restantes para obtener tu nivel final.`;
+      totalEl.textContent = "--";
+      topScoreEl.textContent = String(count);
+      topUnitEl.textContent = "/10";
+      topPill.title = "Preguntas respondidas en la Etapa 1";
+      statusText.textContent = `Llevas ${count} de 10 preguntas respondidas. Completa las ${10 - count} restantes para ver tu resultado final.`;
     } else {
       totalEl.textContent = String(total);
       topScoreEl.textContent = String(total);
+      topUnitEl.textContent = "/100";
+      topPill.title = "Calificación final de la Etapa 1";
       const level = getMoonLevel(total);
       statusText.textContent = `¡Autodiagnóstico completo! Tu nivel es ${level.name} (${level.range} pts).`;
     }
@@ -526,7 +517,7 @@
         tag.className = "radar-status-tag watch";
         tag.hidden = false;
       } else {
-        if (state.answers[q.id] === 10) okCount++;
+        if (Object.keys(state.answers).length === QUESTIONS.length && state.answers[q.id] === 10) okCount++;
         btn.textContent = "";
         tag.hidden = true;
       }
@@ -716,8 +707,8 @@
       sumScore.textContent = `${total} / 100 · ${lvl.name}`;
       sumMoon.textContent = lvl.desc;
     } else if (count > 0) {
-      sumScore.textContent = `${total} pts (${count}/10 respondidas)`;
-      sumMoon.textContent = `Te faltan ${10 - count} preguntas para ver tu nivel de luna final.`;
+      sumScore.textContent = `${count} de 10 preguntas respondidas`;
+      sumMoon.textContent = `Te faltan ${10 - count} preguntas para descubrir tu resultado y tu nivel de luna.`;
     } else {
       sumScore.textContent = "Aún faltan preguntas por responder";
       sumMoon.textContent = "Responde las 10 preguntas de la Etapa 1 para conocer tu luna.";
@@ -799,7 +790,7 @@
       state.meta.grupo ? `Grupo: ${state.meta.grupo}` : null,
       state.meta.fecha ? `Fecha: ${state.meta.fecha}` : null,
       "",
-      `ETAPA 1 · Calificación: ${count === 10 ? `${total}/100 (${lvl.name})` : `${total} pts (${count}/10 respondidas)`}`,
+      `ETAPA 1 · Calificación: ${count === 10 ? `${total}/100 (${lvl.name})` : `Pendiente (${count}/10 respondidas)`}`,
       lvl ? lvl.desc : null,
       "",
       `ETAPA 2 · Radar de riesgos`,

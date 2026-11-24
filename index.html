@@ -47,9 +47,9 @@
       </nav>
 
       <div class="topbar-actions">
-        <div class="score-pill" id="topbar-score-pill" title="Puntos actuales en la Etapa 1">
-          <span class="score-pill-value" id="topbar-score">--</span>
-          <span class="score-pill-max">/100</span>
+        <div class="score-pill" id="topbar-score-pill" title="Progreso en la Etapa 1">
+          <span class="score-pill-value" id="topbar-score">0</span>
+          <span class="score-pill-max" id="topbar-score-unit">/10</span>
         </div>
         <button type="button" class="icon-btn" id="theme-toggle" aria-label="Cambiar entre modo claro y modo noche" title="Modo noche">
           <svg class="icon-moon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -81,7 +81,7 @@
         <div class="hero-copy">
           <p class="eyebrow">GUÍA DE SUEÑO · AUTODIAGNÓSTICO</p>
           <h1 id="main-title">Mapa del Sueño</h1>
-          <p class="hero-subtitle">Responde, suma puntos y descubre cómo mejorar tu descanso.</p>
+          <p class="hero-subtitle">Responde con sinceridad y descubre cómo mejorar tu descanso.</p>
         </div>
         <div class="hero-badge" aria-hidden="true">
           <svg viewBox="0 0 88 88" width="84" height="84" fill="none">
@@ -119,11 +119,11 @@
           </div>
           <div class="how-step">
             <span class="how-badge">2</span>
-            <p><strong>Elige tu respuesta</strong> y tus puntos aparecerán en el cuadro punteado.</p>
+            <p><strong>Elige la respuesta</strong> que más se parezca a tu rutina real de las últimas semanas.</p>
           </div>
           <div class="how-step">
             <span class="how-badge">3</span>
-            <p>¿Tu respuesta tiene <span class="inline-warn" aria-label="alerta">⚠️</span>? Es un <strong>factor de riesgo</strong>: se marcará en tu Radar (Etapa 2).</p>
+            <p>Al terminar las 10 preguntas descubrirás tu <strong>nivel de luna</strong> y tus <strong>factores de riesgo</strong> en el Radar (Etapa 2).</p>
           </div>
         </div>
       </div>
@@ -154,8 +154,8 @@
       <div class="score-summary-card" id="calificacion-card">
         <div class="score-summary-top">
           <div>
-            <h3 class="score-heading">Tu calificación</h3>
-            <p class="score-sub" id="score-status-text">Suma los puntos de tus 10 cuadros y busca tu nivel de luna.</p>
+            <h3 class="score-heading">Tu resultado</h3>
+            <p class="score-sub" id="score-status-text">Responde las 10 preguntas para descubrir tu calificación y tu nivel de luna.</p>
           </div>
           <div class="total-score-box" aria-live="polite">
             <span class="total-score-num" id="total-score">--</span>
@@ -241,7 +241,7 @@
       </div>
 
       <p class="stage-intro">
-        Regresa a tus respuestas. Por cada pregunta donde elegiste una opción con <span class="inline-warn">⚠️</span> <strong>(0 puntos)</strong>, palomea ese factor (<strong class="tag-risk">✓ Riesgo</strong>). Si sacaste <strong>5 puntos</strong>, márcalo como <strong>"en observación"</strong> con un círculo (<strong class="tag-watch">○ En observación</strong>). <em>Aquí se marcan automáticamente según tu Etapa 1, pero también puedes tocar cualquier casilla para ajustarla.</em>
+        Al completar las 10 preguntas de la Etapa 1, aquí se marcarán automáticamente tus <strong>factores de riesgo</strong> (<strong class="tag-risk">✓ Riesgo</strong>) y los hábitos <strong>"en observación"</strong> (<strong class="tag-watch">○ En observación</strong>). Junto a cada factor hay una pregunta para que pienses cómo mejorarlo; también puedes tocar cualquier casilla para ajustarla.
       </p>
 
       <!-- Radar Stats & Filter -->
