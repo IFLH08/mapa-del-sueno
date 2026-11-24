@@ -1730,6 +1730,54 @@ body {
   gap: 10px;
 }
 
+.cloud-save-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: var(--radius-md);
+  background: var(--gold-soft);
+  border: 1.6px solid var(--gold-border);
+}
+
+.cloud-save-bar.saved {
+  background: var(--ok-soft);
+  border-color: color-mix(in srgb, var(--ok) 40%, transparent);
+}
+
+.cloud-save-info {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.cloud-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold-border);
+  flex-shrink: 0;
+}
+
+.cloud-save-bar.saved .cloud-status-dot {
+  background: var(--ok);
+}
+
+.footer-link {
+  color: var(--ink-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-link:hover {
+  color: var(--ink);
+}
+
 /* ==================== BUTTONS ==================== */
 .btn {
   display: inline-flex;
@@ -2139,6 +2187,7 @@ body {
   #sync-radar-btn,
   .challenge-suggestions,
   .tool-practice-btn,
+  .cloud-save-bar,
   .summary-actions,
   .modal-backdrop,
   .toast,

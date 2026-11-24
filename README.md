@@ -2,7 +2,9 @@
 
 Página web interactiva y responsiva (laptop, iPad y teléfono) basada en la **Guía de Sueño · Autodiagnóstico (Mapa del Sueño)**.
 
-🔗 **Sitio publicado en GitHub Pages:** https://iflh08.github.io/mapa-del-sueno/
+🔗 **Sitio publicado en Vercel:** https://mapa-del-sueno.vercel.app
+🔗 **Panel de resultados (admin):** https://mapa-del-sueno.vercel.app/resultados.html
+🔗 **Sitio en GitHub Pages:** https://iflh08.github.io/mapa-del-sueno/
 
 ## ¿Qué incluye?
 

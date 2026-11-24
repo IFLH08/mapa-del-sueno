@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Panel de Resultados · Mapa del Sueño</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=4" />
+  <style>
+    .admin-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+    }
+
+    .login-card {
+      max-width: 440px;
+      margin: 56px auto;
+      background: var(--surface);
+      border: 1.8px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+    }
+
+    .login-card h1 {
+      margin: 8px 0 6px;
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+
+    .login-card p {
+      margin: 0 0 18px;
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .login-error {
+      margin: 0;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--risk-soft);
+      color: var(--risk);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1.6px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-label {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 1.65rem;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .kpi-sub {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    .insights-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 740px) {
+      .insights-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .insight-card {
+      background: var(--surface);
+      border: 1.6px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .insight-card h3 {
+      margin: 0 0 12px;
+      font-size: 0.96rem;
+      font-weight: 800;
+    }
+
+    .bar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.83rem;
+      font-weight: 600;
+    }
+
+    .bar-track {
+      height: 8px;
+      border-radius: 999px;
+      background: var(--surface-tint);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #161f4c;
+    }
+
+    [data-theme="dark"] .bar-fill {
+      background: var(--gold);
+    }
+
+    .bar-fill.risk-fill {
+      background: var(--risk);
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .controls-bar input,
+    .controls-bar select {
+      min-height: 40px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.88rem;
+    }
+
+    .controls-bar input {
+      flex: 1 1 210px;
+    }
+
+    .responses-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .resp-card {
+      background: var(--surface);
+      border: 1.6px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    @media (min-width: 780px) {
+      .resp-card {
+        grid-template-columns: 1.4fr 0.9fr 1.4fr auto;
+        align-items: center;
+        gap: 14px;
+      }
+    }
+
+    .resp-name {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+
+    .resp-meta {
+      margin: 2px 0 0;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    .resp-score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--surface-tint);
+      font-weight: 800;
+      font-size: 0.84rem;
+    }
+
+    .resp-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .mini-tag {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--risk-soft);
+      color: var(--risk);
+    }
+
+    .mini-tag.ok {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .resp-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.86rem;
+    }
+
+    .detail-item {
+      background: var(--surface-tint);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+    }
+
+    .detail-item strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-moon" aria-hidden="true">
+          <svg viewBox="0 0 36 36" width="26" height="26" fill="none">
+            <circle cx="18" cy="18" r="17" fill="#ECEFF9" />
+            <path d="M23.5 8.5C21.1 7.6 18.4 7.8 16.1 9.2C11.9 11.7 10.5 17.2 13 21.5C15.5 25.8 21 27.2 25.3 24.7C26.4 24.1 27.3 23.3 28 22.3C24.9 23.2 21.5 22 19.8 19.1C18 16 19.1 12 22.3 10.1C22.7 9.9 23.1 9.7 23.5 9.5V8.5Z" fill="#F5BC2C" stroke="#161F4C" stroke-width="1.8" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <span class="brand-text" style="display:inline;">Mapa del Sueño · Resultados</span>
+      </a>
+      <div class="topbar-actions">
+        <a href="index.html" class="btn btn-ghost btn-sm">← Volver al test</a>
+        <button type="button" class="btn btn-ghost btn-sm" id="logout-btn" hidden>Salir</button>
+        <button type="button" class="icon-btn" id="theme-toggle" aria-label="Cambiar modo noche" title="Modo noche">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-wrap">
+    <!-- Login View -->
+    <section class="login-card" id="login-view">
+      <p class="eyebrow">ACCESO PRIVADO</p>
+      <h1>Panel de Resultados</h1>
+      <p>Ingresa tu clave de administrador para consultar y exportar las respuestas guardadas.</p>
+      <form class="login-form" id="login-form">
+        <label class="field-group">
+          <span>Clave de administrador</span>
+          <input type="password" id="admin-key-input" required placeholder="Ingresa la clave" autocomplete="current-password" />
+        </label>
+        <p class="login-error" id="login-error" hidden></p>
+        <button type="submit" class="btn btn-primary btn-block" id="login-submit">Entrar al panel</button>
+      </form>
+    </section>
+
+    <!-- Dashboard View -->
+    <section id="dashboard-view" hidden>
+      <div class="stage-header">
+        <div>
+          <h1 class="stage-title">Respuestas guardadas</h1>
+          <p class="stage-caption" id="last-refresh-label">Cargando datos...</p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" id="refresh-btn">↻ Actualizar</button>
+          <button type="button" class="btn btn-primary btn-sm" id="export-csv-btn">📥 Exportar CSV (Excel)</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Total de respuestas</span>
+          <div class="kpi-value" id="kpi-total">0</div>
+          <div class="kpi-sub" id="kpi-groups">0 grupos</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Promedio general</span>
+          <div class="kpi-value" id="kpi-avg">-- / 100</div>
+          <div class="kpi-sub" id="kpi-avg-moon">Sin datos</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Factor más frecuente</span>
+          <div class="kpi-value" style="font-size:1.1rem;" id="kpi-top-risk">—</div>
+          <div class="kpi-sub" id="kpi-top-risk-sub">Factores con alerta ⚠️</div>
+        </div>
+      </div>
+
+      <div class="insights-grid">
+        <div class="insight-card">
+          <h3>Distribución por nivel de luna</h3>
+          <div class="bar-list" id="moon-bars"></div>
+        </div>
+        <div class="insight-card">
+          <h3>Factores de riesgo más comunes</h3>
+          <div class="bar-list" id="risk-bars"></div>
+        </div>
+      </div>
+
+      <div class="controls-bar">
+        <input type="search" id="search-input" placeholder="Buscar por nombre o reto..." />
+        <select id="group-filter" aria-label="Filtrar por grupo">
+          <option value="">Todos los grupos</option>
+        </select>
+        <select id="moon-filter" aria-label="Filtrar por nivel de luna">
+          <option value="">Todos los niveles</option>
+          <option value="llena">Luna llena (85–100)</option>
+          <option value="creciente">Luna creciente (60–80)</option>
+          <option value="media">Media luna (35–55)</option>
+          <option value="menguante">Luna menguante (0–30)</option>
+        </select>
+      </div>
+
+      <div class="responses-list" id="responses-list"></div>
+    </section>
+  </main>
+
+  <!-- Detail Modal -->
+  <div class="modal-backdrop" id="detail-modal" hidden role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="modal-panel" style="max-width:580px;">
+      <div class="modal-head">
+        <h3 id="detail-title">Detalle de respuesta</h3>
+        <button type="button" class="modal-close" id="detail-close" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="detail-list" id="detail-body"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="resultados.js?v=4"></script>
+</body>
+</html>

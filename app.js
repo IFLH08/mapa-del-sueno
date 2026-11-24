@@ -6,6 +6,9 @@
   "use strict";
 
   const STORAGE_KEY = "mapa_del_sueno_v1";
+  const API_URL = window.location.hostname.endsWith("github.io")
+    ? "https://mapa-del-sueno.vercel.app/api/respuestas"
+    : "/api/respuestas";
 
   const QUESTIONS = [
     {
@@ -175,7 +178,8 @@
         journaling: { nights: [false, false, false], rating: 0 },
         meditacion: { nights: [false, false, false], rating: 0 }
       },
-      journal: { todo1: "", todo2: "", todo3: "", worry: "", good: "" }
+      journal: { todo1: "", todo2: "", todo3: "", worry: "", good: "" },
+      cloud: { submissionId: null, editToken: null, savedAt: null }
     };
   }
 
@@ -198,7 +202,8 @@
           journaling: { ...base.tools.journaling, ...(parsed.tools?.journaling || {}) },
           meditacion: { ...base.tools.meditacion, ...(parsed.tools?.meditacion || {}) }
         },
-        journal: { ...base.journal, ...(parsed.journal || {}) }
+        journal: { ...base.journal, ...(parsed.journal || {}) },
+        cloud: { ...base.cloud, ...(parsed.cloud || {}) }
       };
     } catch {
       return defaultState();
@@ -767,6 +772,90 @@
       : "Prueba tu herramienta durante 3 noches y califícala con estrellas.";
 
     updateProgressBar();
+    updateCloudStatusUI();
+  }
+
+  function updateCloudStatusUI() {
+    const bar = document.getElementById("cloud-save-bar");
+    const statusEl = document.getElementById("cloud-save-status");
+    const btn = document.getElementById("save-cloud-btn");
+    if (!bar || !statusEl || !btn) return;
+
+    if (state.cloud?.submissionId && state.cloud?.savedAt) {
+      bar.classList.add("saved");
+      let when = "";
+      try {
+        when = new Intl.DateTimeFormat("es-MX", {
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(new Date(state.cloud.savedAt));
+      } catch {
+        when = state.cloud.savedAt;
+      }
+      statusEl.textContent = `Respuestas guardadas correctamente (${when}). Si editas algo, puedes actualizarlas.`;
+      btn.textContent = "☁️ Actualizar mis respuestas";
+    } else {
+      bar.classList.remove("saved");
+      statusEl.textContent = "Cuando termines, guarda tus respuestas para registrarlas en el servidor.";
+      btn.textContent = "☁️ Guardar mis respuestas";
+    }
+  }
+
+  async function saveToCloud() {
+    const { count } = getAnsweredStats();
+    if (count < QUESTIONS.length) {
+      const missing = QUESTIONS.find((q) => state.answers[q.id] === undefined);
+      showToast(`Responde las 10 preguntas de la Etapa 1 antes de guardar (te faltan ${QUESTIONS.length - count}).`);
+      if (missing) {
+        const card = document.getElementById(`question-${missing.id}`);
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      return;
+    }
+
+    const btn = document.getElementById("save-cloud-btn");
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Guardando...";
+
+    try {
+      const payload = {
+        submissionId: state.cloud?.submissionId || null,
+        editToken: state.cloud?.editToken || null,
+        meta: state.meta,
+        answers: state.answers,
+        radarOverrides: state.radarOverrides,
+        challenge: state.challenge,
+        tree: state.tree,
+        tools: state.tools
+      };
+
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "No se pudo guardar en el servidor.");
+      }
+
+      state.cloud = {
+        submissionId: data.id,
+        editToken: data.editToken,
+        savedAt: data.updatedAt || data.savedAt || new Date().toISOString()
+      };
+      saveState();
+      updateCloudStatusUI();
+      showToast(data.updated ? "Respuestas actualizadas en el servidor ✓" : "Respuestas guardadas en el servidor ✓");
+    } catch (err) {
+      showToast(err.message || "Error al conectar con el servidor");
+      btn.textContent = originalText;
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   function updateAllViews() {
@@ -1127,6 +1216,7 @@
     });
 
     // Summary actions
+    document.getElementById("save-cloud-btn").addEventListener("click", saveToCloud);
     document.getElementById("print-btn").addEventListener("click", () => window.print());
 
     document.getElementById("copy-summary-btn").addEventListener("click", async () => {
