@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Mapa del Sueño: hoja interactiva de autodiagnóstico para evaluar tus hábitos de sueño, identificar factores de riesgo y encontrar tu herramienta ideal para descansar mejor." />
+  <meta name="theme-color" content="#161F4C" />
+  <title>Mapa del Sueño · Autodiagnóstico</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Sticky Navigation & Progress Bar -->
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a href="#inicio" class="brand" aria-label="Inicio de Mapa del Sueño">
+        <span class="brand-moon" aria-hidden="true">
+          <svg viewBox="0 0 36 36" width="26" height="26" fill="none">
+            <circle cx="18" cy="18" r="17" fill="#ECEFF9" />
+            <path d="M23.5 8.5C21.1 7.6 18.4 7.8 16.1 9.2C11.9 11.7 10.5 17.2 13 21.5C15.5 25.8 21 27.2 25.3 24.7C26.4 24.1 27.3 23.3 28 22.3C24.9 23.2 21.5 22 19.8 19.1C18 16 19.1 12 22.3 10.1C22.7 9.9 23.1 9.7 23.5 9.5V8.5Z" fill="#F5BC2C" stroke="#161F4C" stroke-width="1.8" stroke-linejoin="round" />
+            <path d="M27.2 11.8L27.9 13.4L29.5 14.1L27.9 14.8L27.2 16.4L26.5 14.8L24.9 14.1L26.5 13.4L27.2 11.8Z" fill="#161F4C" />
+          </svg>
+        </span>
+        <span class="brand-text">Mapa del Sueño</span>
+      </a>
+
+      <nav class="step-nav" aria-label="Navegación por etapas">
+        <a href="#etapa-1" class="step-link active" data-section="etapa-1">
+          <span class="step-num">1</span>
+          <span class="step-label">Calificación</span>
+        </a>
+        <a href="#etapa-2" class="step-link" data-section="etapa-2">
+          <span class="step-num">2</span>
+          <span class="step-label">Radar</span>
+        </a>
+        <a href="#etapa-3" class="step-link" data-section="etapa-3">
+          <span class="step-num">3</span>
+          <span class="step-label">Herramientas</span>
+        </a>
+        <a href="#resumen" class="step-link" data-section="resumen">
+          <span class="step-num">✓</span>
+          <span class="step-label">Resumen</span>
+        </a>
+      </nav>
+
+      <div class="topbar-actions">
+        <div class="score-pill" id="topbar-score-pill" title="Puntos actuales en la Etapa 1">
+          <span class="score-pill-value" id="topbar-score">--</span>
+          <span class="score-pill-max">/100</span>
+        </div>
+        <button type="button" class="icon-btn" id="theme-toggle" aria-label="Cambiar entre modo claro y modo noche" title="Modo noche">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="progress-rail" aria-hidden="true">
+      <div class="progress-rail-fill" id="global-progress-fill"></div>
+    </div>
+  </header>
+
+  <main class="container" id="inicio">
+    <!-- HERO / PORTADA -->
+    <section class="hero-card" aria-labelledby="main-title">
+      <div class="hero-top">
+        <div class="hero-copy">
+          <p class="eyebrow">GUÍA DE SUEÑO · AUTODIAGNÓSTICO</p>
+          <h1 id="main-title">Mapa del Sueño</h1>
+          <p class="hero-subtitle">Responde, suma puntos y descubre cómo mejorar tu descanso.</p>
+        </div>
+        <div class="hero-badge" aria-hidden="true">
+          <svg viewBox="0 0 88 88" width="84" height="84" fill="none">
+            <circle cx="44" cy="44" r="42" class="hero-moon-bg" />
+            <path d="M55.5 19.5C50 17.3 43.8 17.7 38.4 20.8C28.4 26.6 25 39.4 30.8 49.4C36.6 59.4 49.4 62.8 59.4 57C61.9 55.6 64 53.7 65.6 51.5C58.6 53.7 50.6 50.8 46.8 44.1C42.5 36.7 45.1 27.3 52.5 23C53.5 22.4 54.5 22 55.5 21.7V19.5Z" fill="#F5BC2C" stroke="#161F4C" stroke-width="3.2" stroke-linejoin="round" />
+            <path d="M64.5 27.5L66 31.4L70 33L66 34.6L64.5 38.5L63 34.6L59 33L63 31.4L64.5 27.5Z" fill="#161F4C" />
+            <circle cx="57.5" cy="23.5" r="2" fill="#161F4C" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Datos del usuario -->
+      <div class="meta-grid">
+        <label class="meta-field">
+          <span class="meta-label">Nombre:</span>
+          <input type="text" id="meta-nombre" placeholder="Tu nombre completo" autocomplete="name" />
+        </label>
+        <label class="meta-field">
+          <span class="meta-label">Grupo:</span>
+          <input type="text" id="meta-grupo" placeholder="Ej. 3°A" />
+        </label>
+        <label class="meta-field">
+          <span class="meta-label">Fecha:</span>
+          <input type="date" id="meta-fecha" />
+        </label>
+      </div>
+
+      <!-- Cómo jugar -->
+      <div class="how-to-box">
+        <h2 class="how-to-title">Cómo jugar</h2>
+        <div class="how-to-steps">
+          <div class="how-step">
+            <span class="how-badge">1</span>
+            <p>Lee cada pregunta y <strong>sigue las flechas</strong> hacia abajo, de la 1 a la 10.</p>
+          </div>
+          <div class="how-step">
+            <span class="how-badge">2</span>
+            <p><strong>Elige tu respuesta</strong> y tus puntos aparecerán en el cuadro punteado.</p>
+          </div>
+          <div class="how-step">
+            <span class="how-badge">3</span>
+            <p>¿Tu respuesta tiene <span class="inline-warn" aria-label="alerta">⚠️</span>? Es un <strong>factor de riesgo</strong>: se marcará en tu Radar (Etapa 2).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 1: CALIFICACIÓN DE SUEÑO -->
+    <section class="stage-section" id="etapa-1" aria-labelledby="etapa-1-title">
+      <div class="stage-header">
+        <div>
+          <h2 id="etapa-1-title" class="stage-title">ETAPA 1 · Calificación de sueño</h2>
+          <p class="stage-caption">Preguntas 1 a 10 · Responde según tus hábitos de las últimas semanas</p>
+        </div>
+        <div class="stage-counter" id="q-progress-badge">0 de 10 respondidas</div>
+      </div>
+
+      <!-- Questions 1..10 rendered dynamically by app.js -->
+      <div class="questions-flow" id="questions-container"></div>
+
+      <!-- Arrow to score card -->
+      <div class="flow-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="4" x2="12" y2="19" />
+          <polyline points="6 14 12 20 18 14" />
+        </svg>
+      </div>
+
+      <!-- Tu calificación -->
+      <div class="score-summary-card" id="calificacion-card">
+        <div class="score-summary-top">
+          <div>
+            <h3 class="score-heading">Tu calificación</h3>
+            <p class="score-sub" id="score-status-text">Suma los puntos de tus 10 cuadros y busca tu nivel de luna.</p>
+          </div>
+          <div class="total-score-box" aria-live="polite">
+            <span class="total-score-num" id="total-score">--</span>
+            <span class="total-score-denom">/ 100</span>
+          </div>
+        </div>
+
+        <div class="moon-levels-grid" id="moon-levels-grid">
+          <article class="moon-card" data-level="llena">
+            <div class="moon-card-head">
+              <span class="moon-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" width="28" height="28">
+                  <circle cx="16" cy="16" r="12" fill="#F5BC2C" stroke="#161F4C" stroke-width="2.2" />
+                </svg>
+              </span>
+              <span class="moon-range">85 – 100</span>
+            </div>
+            <h4>Luna llena</h4>
+            <p>¡Maestro del sueño! Tus hábitos te ayudan a descansar. Sigue así.</p>
+          </article>
+
+          <article class="moon-card" data-level="creciente">
+            <div class="moon-card-head">
+              <span class="moon-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" width="28" height="28">
+                  <circle cx="16" cy="16" r="12" fill="#FFFFFF" stroke="#161F4C" stroke-width="2.2" />
+                  <path d="M16 4 A12 12 0 1 1 16 28 A6 12 0 0 1 16 4 Z" fill="#F5BC2C" />
+                  <circle cx="16" cy="16" r="12" fill="none" stroke="#161F4C" stroke-width="2.2" />
+                </svg>
+              </span>
+              <span class="moon-range">60 – 80</span>
+            </div>
+            <h4>Luna creciente</h4>
+            <p>Vas bien. Ajusta los factores de tu Radar para subir de nivel.</p>
+          </article>
+
+          <article class="moon-card" data-level="media">
+            <div class="moon-card-head">
+              <span class="moon-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" width="28" height="28">
+                  <circle cx="16" cy="16" r="12" fill="#FFFFFF" stroke="#161F4C" stroke-width="2.2" />
+                  <path d="M16 4 A12 12 0 0 1 16 28 Z" fill="#161F4C" />
+                  <circle cx="16" cy="16" r="12" fill="none" stroke="#161F4C" stroke-width="2.2" />
+                </svg>
+              </span>
+              <span class="moon-range">35 – 55</span>
+            </div>
+            <h4>Media luna</h4>
+            <p>Batería baja. Tu sueño necesita atención: elige 1 o 2 cambios.</p>
+          </article>
+
+          <article class="moon-card" data-level="menguante">
+            <div class="moon-card-head">
+              <span class="moon-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" width="28" height="28">
+                  <circle cx="16" cy="16" r="12" fill="#FFFFFF" stroke="#161F4C" stroke-width="2.2" />
+                </svg>
+              </span>
+              <span class="moon-range">0 – 30</span>
+            </div>
+            <h4>Luna menguante</h4>
+            <p>Alerta de sueño. Empieza hoy con tu Radar y platícalo con un adulto de confianza.</p>
+          </article>
+        </div>
+
+        <div class="score-footer-cta">
+          <p class="next-hint">Ahora ve a la <strong>Etapa 2</strong> y revisa tus factores de riesgo ⚠️</p>
+          <a href="#etapa-2" class="btn btn-primary">Ir a mi Radar de riesgos →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 2: TU RADAR DE RIESGOS -->
+    <section class="stage-section" id="etapa-2" aria-labelledby="etapa-2-title">
+      <div class="stage-header">
+        <div>
+          <h2 id="etapa-2-title" class="stage-title">ETAPA 2 · Tu Radar de riesgos</h2>
+          <p class="stage-caption">Identifica qué hábitos están afectando tu descanso y planea tu reto</p>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" id="sync-radar-btn" title="Sincronizar marcas según tus respuestas de la Etapa 1">
+          ↻ Sincronizar con Etapa 1
+        </button>
+      </div>
+
+      <p class="stage-intro">
+        Regresa a tus respuestas. Por cada pregunta donde elegiste una opción con <span class="inline-warn">⚠️</span> <strong>(0 puntos)</strong>, palomea ese factor (<strong class="tag-risk">✓ Riesgo</strong>). Si sacaste <strong>5 puntos</strong>, márcalo como <strong>"en observación"</strong> con un círculo (<strong class="tag-watch">○ En observación</strong>). <em>Aquí se marcan automáticamente según tu Etapa 1, pero también puedes tocar cualquier casilla para ajustarla.</em>
+      </p>
+
+      <!-- Radar Stats & Filter -->
+      <div class="radar-toolbar">
+        <div class="radar-pills" id="radar-stats">
+          <span class="stat-chip chip-risk"><strong id="count-risk">0</strong> con riesgo (⚠️)</span>
+          <span class="stat-chip chip-watch"><strong id="count-watch">0</strong> en observación (○)</span>
+          <span class="stat-chip chip-ok"><strong id="count-ok">0</strong> sin riesgo</span>
+        </div>
+        <div class="radar-filter" role="group" aria-label="Filtrar factores">
+          <button type="button" class="filter-btn active" data-filter="all">Todos (10)</button>
+          <button type="button" class="filter-btn" data-filter="flagged">Solo marcados</button>
+        </div>
+      </div>
+
+      <!-- Radar Table / Responsive Cards -->
+      <div class="radar-card">
+        <div class="radar-table-head" aria-hidden="true">
+          <span>Marca</span>
+          <span>Factor de riesgo</span>
+          <span>¿Qué podrías hacer para mejorarlo?</span>
+          <span class="sr-only">Acción</span>
+        </div>
+        <div class="radar-list" id="radar-list"></div>
+      </div>
+
+      <!-- Mi reto de la semana -->
+      <div class="challenge-card">
+        <div class="challenge-head">
+          <span class="challenge-icon" aria-hidden="true">
+            <svg viewBox="0 0 28 28" width="28" height="28" fill="none">
+              <circle cx="14" cy="14" r="11" stroke="#161F4C" stroke-width="2.2" />
+              <circle cx="14" cy="14" r="6.5" stroke="#161F4C" stroke-width="2" />
+              <circle cx="14" cy="14" r="2.5" fill="#161F4C" />
+            </svg>
+          </span>
+          <div>
+            <h3>Mi reto de la semana</h3>
+            <p class="challenge-sub">Elige 1 factor de tu Radar y comprométete con una acción concreta.</p>
+          </div>
+        </div>
+
+        <div class="challenge-suggestions" id="challenge-suggestions" hidden>
+          <span class="suggestions-label">Tus factores detectados (toca uno para elegirlo):</span>
+          <div class="suggestions-chips" id="challenge-chips"></div>
+        </div>
+
+        <div class="challenge-fields">
+          <label class="field-group">
+            <span>El factor que voy a mejorar:</span>
+            <input type="text" id="challenge-factor" placeholder="Ej. Pantallas antes de dormir" list="factors-datalist" />
+            <datalist id="factors-datalist"></datalist>
+          </label>
+
+          <label class="field-group">
+            <span>Lo que voy a hacer:</span>
+            <textarea id="challenge-action" rows="2" placeholder="Ej. Dejar el celular cargando fuera de mi cama 30 minutos antes de dormir y activar el modo No molestar."></textarea>
+          </label>
+
+          <div class="nights-row">
+            <label for="challenge-nights">Lo voy a intentar durante</label>
+            <div class="stepper">
+              <button type="button" class="stepper-btn" id="nights-dec" aria-label="Disminuir noches">−</button>
+              <input type="number" id="challenge-nights" min="1" max="30" value="5" inputmode="numeric" />
+              <button type="button" class="stepper-btn" id="nights-inc" aria-label="Aumentar noches">+</button>
+            </div>
+            <span>noches.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 3: ENCUENTRA TU HERRAMIENTA -->
+    <section class="stage-section" id="etapa-3" aria-labelledby="etapa-3-title">
+      <div class="stage-header">
+        <div>
+          <h2 id="etapa-3-title" class="stage-title">ETAPA 3 · Encuentra tu herramienta</h2>
+          <p class="stage-caption">Sigue el mapa de decisión y pon a prueba tu herramienta durante 3 noches</p>
+        </div>
+      </div>
+
+      <p class="stage-intro">
+        Empieza arriba, elige el camino que más se parezca a ti y sigue las flechas hasta llegar a una herramienta. Luego búscala abajo para saber cómo hacerla.
+      </p>
+
+      <!-- Decision Tree -->
+      <div class="decision-tree" id="decision-tree">
+        <div class="tree-root-banner">
+          Cuando intentas dormir, ¿qué te pasa más seguido?
+        </div>
+
+        <div class="tree-branches">
+          <!-- Branch 1 -->
+          <div class="tree-branch" data-branch="mente">
+            <div class="branch-arrow" aria-hidden="true">↓</div>
+            <button type="button" class="branch-start-btn" data-branch="mente" aria-pressed="false">
+              <span class="radio-dot" aria-hidden="true"></span>
+              <span>Mi mente no para: pienso en pendientes, en lo que pasó o en lo que viene.</span>
+            </button>
+            <div class="branch-arrow" aria-hidden="true">↓</div>
+            <div class="branch-followup">
+              <p class="followup-question">¿Te gusta escribir o hacer listas?</p>
+              <button type="button" class="followup-option" data-branch="mente" data-choice="mente-si" data-tool="journaling">
+                <span class="radio-dot" aria-hidden="true"></span>
+                <span class="followup-text">Sí</span>
+                <span class="arrow-inline" aria-hidden="true">→</span>
+                <span class="tool-badge">JOURNALING</span>
+              </button>
+              <button type="button" class="followup-option" data-branch="mente" data-choice="mente-no" data-tool="meditacion">
+                <span class="radio-dot" aria-hidden="true"></span>
+                <span class="followup-text">No mucho</span>
+                <span class="arrow-inline" aria-hidden="true">→</span>
+                <span class="tool-badge">MEDITACIÓN</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Branch 2 -->
+          <div class="tree-branch" data-branch="cuerpo">
+            <div class="branch-arrow" aria-hidden="true">↓</div>
+            <button type="button" class="branch-start-btn" data-branch="cuerpo" aria-pressed="false">
+              <span class="radio-dot" aria-hidden="true"></span>
+              <span>Siento el cuerpo tenso, inquieto o el corazón acelerado.</span>
+            </button>
+            <div class="branch-arrow" aria-hidden="true">↓</div>
+            <div class="branch-followup">
+              <p class="followup-question">¿Prefieres algo rápido que puedas hacer sin celular?</p>
+              <button type="button" class="followup-option" data-branch="cuerpo" data-choice="cuerpo-si" data-tool="respiracion">
+                <span class="radio-dot" aria-hidden="true"></span>
+                <span class="followup-text">Sí</span>
+                <span class="arrow-inline" aria-hidden="true">→</span>
+                <span class="tool-badge">RESPIRACIÓN</span>
+              </button>
+              <button type="button" class="followup-option" data-branch="cuerpo" data-choice="cuerpo-guia" data-tool="meditacion">
+                <span class="radio-dot" aria-hidden="true"></span>
+                <span class="followup-text">Prefiero escuchar una guía</span>
+                <span class="arrow-inline" aria-hidden="true">→</span>
+                <span class="tool-badge">MEDITACIÓN</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Branch 3 -->
+          <div class="tree-branch" data-branch="celular">
+            <div class="branch-arrow" aria-hidden="true">↓</div>
+            <button type="button" class="branch-start-btn" data-branch="celular" aria-pressed="false">
+              <span class="radio-dot" aria-hidden="true"></span>
+              <span>No tengo sueño y termino viendo el celular.</span>
+            </button>
+            <div class="branch-arrow" aria-hidden="true">↓</div>
+            <div class="branch-followup">
+              <p class="followup-question">¿Prefieres hacer algo con los ojos cerrados?</p>
+              <button type="button" class="followup-option" data-branch="celular" data-choice="celular-si" data-tool="respiracion">
+                <span class="radio-dot" aria-hidden="true"></span>
+                <span class="followup-text">Sí</span>
+                <span class="arrow-inline" aria-hidden="true">→</span>
+                <span class="tool-badge">RESPIRACIÓN</span>
+              </button>
+              <button type="button" class="followup-option" data-branch="celular" data-choice="celular-no" data-tool="journaling">
+                <span class="radio-dot" aria-hidden="true"></span>
+                <span class="followup-text">No, prefiero escribir</span>
+                <span class="arrow-inline" aria-hidden="true">→</span>
+                <span class="tool-badge">JOURNALING</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="recommendation-banner" id="recommendation-banner" hidden aria-live="polite">
+          <div>
+            <span class="rec-eyebrow">Tu punto de partida sugerido</span>
+            <p class="rec-text" id="recommendation-text"></p>
+          </div>
+          <a href="#herramientas-grid" class="btn btn-primary btn-sm" id="jump-to-tool-btn">Ver cómo hacerla ↓</a>
+        </div>
+      </div>
+
+      <!-- Tus 3 herramientas -->
+      <div class="tools-header" id="herramientas-grid">
+        <h3>Tus 3 herramientas</h3>
+        <span class="tools-sub">Pruébala 3 noches y califícala</span>
+      </div>
+
+      <div class="tools-grid">
+        <!-- Tool 1: Respiración 4-7-8 -->
+        <article class="tool-card" id="tool-respiracion" data-tool="respiracion">
+          <div class="tool-rec-pill" hidden>★ Recomendada para ti</div>
+          <div class="tool-card-top">
+            <span class="tool-icon-box" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2" />
+              </svg>
+            </span>
+            <h4>Respiración 4-7-8</h4>
+          </div>
+          <p class="tool-ideal"><strong>Ideal si:</strong> sientes el cuerpo tenso o quieres algo rápido (2 a 3 min).</p>
+          <p class="tool-steps-label">CÓMO HACERLA</p>
+          <ol class="tool-steps">
+            <li>Acostado, inhala por la nariz contando hasta 4.</li>
+            <li>Sostén el aire contando hasta 7.</li>
+            <li>Saca el aire por la boca contando hasta 8. Repite 4 veces.</li>
+          </ol>
+
+          <button type="button" class="btn btn-secondary btn-block tool-practice-btn" data-open-modal="modal-breathing">
+            ▶ Practicar guía 4-7-8
+          </button>
+
+          <div class="tool-tracker" data-tool="respiracion">
+            <div class="nights-check">
+              <span class="tracker-label">Noche</span>
+              <label class="night-box"><input type="checkbox" data-tool="respiracion" data-night="1" /><span>1</span></label>
+              <label class="night-box"><input type="checkbox" data-tool="respiracion" data-night="2" /><span>2</span></label>
+              <label class="night-box"><input type="checkbox" data-tool="respiracion" data-night="3" /><span>3</span></label>
+            </div>
+            <div class="star-row">
+              <span class="tracker-label">¿Me ayudó?</span>
+              <div class="stars" data-tool="respiracion" role="radiogroup" aria-label="Calificación de Respiración 4-7-8"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tool 2: Journaling -->
+        <article class="tool-card" id="tool-journaling" data-tool="journaling">
+          <div class="tool-rec-pill" hidden>★ Recomendada para ti</div>
+          <div class="tool-card-top">
+            <span class="tool-icon-box" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                <line x1="8" y1="7" x2="16" y2="7" />
+                <line x1="8" y1="11" x2="16" y2="11" />
+                <line x1="8" y1="15" x2="13" y2="15" />
+              </svg>
+            </span>
+            <h4>Journaling</h4>
+          </div>
+          <p class="tool-ideal"><strong>Ideal si:</strong> tu cabeza está llena de pendientes o preocupaciones.</p>
+          <p class="tool-steps-label">CÓMO HACERLA</p>
+          <ol class="tool-steps">
+            <li>5 minutos antes de dormir, toma papel y pluma.</li>
+            <li>Escribe 3 pendientes de mañana y 1 cosa que te preocupa.</li>
+            <li>Termina con 1 cosa buena de tu día y cierra la libreta.</li>
+          </ol>
+
+          <button type="button" class="btn btn-secondary btn-block tool-practice-btn" data-open-modal="modal-journal">
+            ✎ Abrir libreta rápida
+          </button>
+
+          <div class="tool-tracker" data-tool="journaling">
+            <div class="nights-check">
+              <span class="tracker-label">Noche</span>
+              <label class="night-box"><input type="checkbox" data-tool="journaling" data-night="1" /><span>1</span></label>
+              <label class="night-box"><input type="checkbox" data-tool="journaling" data-night="2" /><span>2</span></label>
+              <label class="night-box"><input type="checkbox" data-tool="journaling" data-night="3" /><span>3</span></label>
+            </div>
+            <div class="star-row">
+              <span class="tracker-label">¿Me ayudó?</span>
+              <div class="stars" data-tool="journaling" role="radiogroup" aria-label="Calificación de Journaling"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tool 3: Meditación para dormir -->
+        <article class="tool-card" id="tool-meditacion" data-tool="meditacion">
+          <div class="tool-rec-pill" hidden>★ Recomendada para ti</div>
+          <div class="tool-card-top">
+            <span class="tool-icon-box" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+              </svg>
+            </span>
+            <h4>Meditación para dormir</h4>
+          </div>
+          <p class="tool-ideal"><strong>Ideal si:</strong> te relaja escuchar una voz o sonidos suaves.</p>
+          <p class="tool-steps-label">CÓMO HACERLA</p>
+          <ol class="tool-steps">
+            <li>Elige un audio guiado de unos 10 min (por ejemplo, escaneo corporal).</li>
+            <li>Pon el celular en modo avión y con la pantalla hacia abajo.</li>
+            <li>Cierra los ojos y sigue la guía, sin presionarte por dormir.</li>
+          </ol>
+
+          <button type="button" class="btn btn-secondary btn-block tool-practice-btn" data-open-modal="modal-meditation">
+            ✦ Guía de escaneo corporal
+          </button>
+
+          <div class="tool-tracker" data-tool="meditacion">
+            <div class="nights-check">
+              <span class="tracker-label">Noche</span>
+              <label class="night-box"><input type="checkbox" data-tool="meditacion" data-night="1" /><span>1</span></label>
+              <label class="night-box"><input type="checkbox" data-tool="meditacion" data-night="2" /><span>2</span></label>
+              <label class="night-box"><input type="checkbox" data-tool="meditacion" data-night="3" /><span>3</span></label>
+            </div>
+            <div class="star-row">
+              <span class="tracker-label">¿Me ayudó?</span>
+              <div class="stars" data-tool="meditacion" role="radiogroup" aria-label="Calificación de Meditación para dormir"></div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Important disclaimer -->
+      <aside class="important-banner" role="note">
+        <span class="important-icon" aria-hidden="true">!</span>
+        <p>
+          <strong>Importante: esto es solo una sugerencia.</strong> El mapa te da un punto de partida, pero lo mejor es experimentar: prueba las tres herramientas, combínalas si quieres y quédate con la que más te guste y te funcione.
+        </p>
+      </aside>
+    </section>
+
+    <!-- RESUMEN Y ACCIONES -->
+    <section class="stage-section" id="resumen" aria-labelledby="resumen-title">
+      <div class="stage-header">
+        <div>
+          <h2 id="resumen-title" class="stage-title">Resumen de mi Mapa del Sueño</h2>
+          <p class="stage-caption">Tu avance se guarda automáticamente en este dispositivo</p>
+        </div>
+      </div>
+
+      <div class="summary-card" id="summary-content">
+        <div class="summary-grid">
+          <div class="summary-block">
+            <span class="summary-label">Calificación y nivel</span>
+            <p class="summary-value" id="sum-score">Aún faltan preguntas por responder</p>
+            <p class="summary-detail" id="sum-moon">Responde las 10 preguntas de la Etapa 1 para conocer tu luna.</p>
+          </div>
+          <div class="summary-block">
+            <span class="summary-label">Radar de riesgos</span>
+            <p class="summary-value" id="sum-risks">Sin factores marcados todavía</p>
+            <p class="summary-detail" id="sum-risks-list">Se llenará automáticamente con tus respuestas.</p>
+          </div>
+          <div class="summary-block">
+            <span class="summary-label">Mi reto de la semana</span>
+            <p class="summary-value" id="sum-challenge">Pendiente de definir</p>
+            <p class="summary-detail" id="sum-challenge-detail">Escribe tu reto en la Etapa 2.</p>
+          </div>
+          <div class="summary-block">
+            <span class="summary-label">Herramienta y seguimiento</span>
+            <p class="summary-value" id="sum-tool">Sin seleccionar</p>
+            <p class="summary-detail" id="sum-tool-detail">Sigue el mapa de la Etapa 3 o prueba cualquiera de las 3 herramientas.</p>
+          </div>
+        </div>
+
+        <div class="summary-actions">
+          <button type="button" class="btn btn-primary" id="print-btn">🖨️ Imprimir / Guardar PDF</button>
+          <button type="button" class="btn btn-secondary" id="copy-summary-btn">📋 Copiar resumen</button>
+          <button type="button" class="btn btn-danger-ghost" id="reset-btn">↺ Reiniciar hoja</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Mapa del Sueño · Hoja interactiva de autodiagnóstico · Tus respuestas se guardan solo en tu navegador.</p>
+  </footer>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- MODAL 1: Respiración 4-7-8 -->
+  <div class="modal-backdrop" id="modal-breathing" hidden role="dialog" aria-modal="true" aria-labelledby="breathing-title">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 id="breathing-title">Respiración guiada 4-7-8</h3>
+        <button type="button" class="modal-close" data-close-modal aria-label="Cerrar">✕</button>
+      </div>
+      <div class="breathing-stage">
+        <div class="breath-orb-wrap">
+          <div class="breath-orb" id="breath-orb">
+            <span class="breath-phase" id="breath-phase">Listo</span>
+            <span class="breath-count" id="breath-count">4-7-8</span>
+          </div>
+        </div>
+        <p class="breath-instruction" id="breath-instruction">Ponte cómodo, relaja los hombros y presiona Iniciar para hacer 4 ciclos.</p>
+        <p class="breath-cycle" id="breath-cycle">Ciclo 0 de 4</p>
+        <div class="modal-controls">
+          <button type="button" class="btn btn-primary" id="breath-start-btn">Iniciar</button>
+          <button type="button" class="btn btn-ghost" id="breath-reset-btn">Reiniciar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Mini-Journaling -->
+  <div class="modal-backdrop" id="modal-journal" hidden role="dialog" aria-modal="true" aria-labelledby="journal-title">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 id="journal-title">Libreta rápida de Journaling</h3>
+        <button type="button" class="modal-close" data-close-modal aria-label="Cerrar">✕</button>
+      </div>
+      <p class="modal-sub">Saca tus pendientes de la cabeza antes de dormir (se guarda solo en tu dispositivo).</p>
+      <div class="journal-form">
+        <label class="field-group">
+          <span>3 pendientes de mañana:</span>
+          <input type="text" id="j-todo-1" placeholder="1. Primer pendiente" />
+          <input type="text" id="j-todo-2" placeholder="2. Segundo pendiente" />
+          <input type="text" id="j-todo-3" placeholder="3. Tercer pendiente" />
+        </label>
+        <label class="field-group">
+          <span>1 cosa que me preocupa:</span>
+          <textarea id="j-worry" rows="2" placeholder="Escríbelo para soltarlo por hoy..."></textarea>
+        </label>
+        <label class="field-group">
+          <span>1 cosa buena de mi día:</span>
+          <textarea id="j-good" rows="2" placeholder="Algo pequeño o grande que agradeces hoy..."></textarea>
+        </label>
+      </div>
+      <div class="modal-controls">
+        <button type="button" class="btn btn-primary" id="journal-save-close">Guardar y cerrar libreta</button>
+        <button type="button" class="btn btn-ghost" id="journal-clear">Limpiar notas</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Escaneo corporal -->
+  <div class="modal-backdrop" id="modal-meditation" hidden role="dialog" aria-modal="true" aria-labelledby="meditation-title">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 id="meditation-title">Guía de escaneo corporal</h3>
+        <button type="button" class="modal-close" data-close-modal aria-label="Cerrar">✕</button>
+      </div>
+      <div class="meditation-stage">
+        <span class="med-step-badge" id="med-step-badge">Paso 1 de 6</span>
+        <h4 class="med-step-title" id="med-step-title">Prepárate para descansar</h4>
+        <p class="med-step-body" id="med-step-body"></p>
+        <div class="med-dots" id="med-dots" aria-hidden="true"></div>
+        <div class="modal-controls">
+          <button type="button" class="btn btn-ghost" id="med-prev-btn">← Anterior</button>
+          <button type="button" class="btn btn-primary" id="med-next-btn">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
